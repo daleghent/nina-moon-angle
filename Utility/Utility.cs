@@ -30,7 +30,7 @@ namespace DaleGhent.NINA.MoonAngle.Utility {
             var onSurface = new NOVAS.OnSurface() {
                 Latitude = observerInfo.Latitude,
                 Longitude = observerInfo.Longitude,
-                Height = observerInfo.Height,
+                Height = observerInfo.Elevation,
                 Pressure = observerInfo.Pressure,
                 Temperature = observerInfo.Temperature,
             };
@@ -96,72 +96,6 @@ namespace DaleGhent.NINA.MoonAngle.Utility {
                 default:
                     return string.Empty;
             }
-        }
-
-        // Math and methodology borrowed from SOFA
-        public static double iauSeps(double al, double ap, double bl, double bp) {
-            double[] ac = new double[3];
-            double[] bc = new double[3];
-
-            // Spherical to Cartesian.
-            iauS2c(al, ap, ref ac);
-            iauS2c(bl, bp, ref bc);
-
-            // Angle between the vectors.
-            return iauSepp(ac, bc);
-        }
-
-        public static double iauSepp(double[] a, double[] b) {
-            double[] axb = new double[3];
-            double ss;
-            double cs;
-
-            // Sine of angle between the vectors, multiplied by the two moduli.
-            iauPxp(a, b, ref axb);
-            ss = iauPm(axb);
-
-            // Cosine of the angle, multiplied by the two moduli.
-            cs = iauPdp(a, b);
-
-            // The angle
-            return ((ss != 0d) || (cs != 0d)) ? Math.Atan2(ss, cs) : 0d;
-        }
-
-        public static void iauPxp(double[] a, double[] b, ref double[] axb) {
-            double xa;
-            double ya;
-            double za;
-            double xb;
-            double yb;
-            double zb;
-
-            xa = a[0];
-            ya = a[1];
-            za = a[2];
-            xb = b[0];
-            yb = b[1];
-            zb = b[2];
-
-            axb[0] = (ya * zb) - (za * yb);
-            axb[1] = (za * xb) - (xa * zb);
-            axb[2] = (xa * yb) - (ya * xb);
-        }
-
-        public static double iauPm(double[] p) {
-            return Math.Sqrt((p[0] * p[0]) + (p[1] * p[1]) + (p[2] * p[2]));
-        }
-
-        public static double iauPdp(double[] a, double[] b) {
-            return (a[0] * b[0]) + (a[1] * b[1]) + (a[2] * b[2]);
-        }
-
-        public static void iauS2c(double theta, double phi, ref double[] c) {
-            double cp;
-
-            cp = Math.Cos(phi);
-            c[0] = Math.Cos(theta) * cp;
-            c[1] = Math.Sin(theta) * cp;
-            c[2] = Math.Sin(phi);
         }
     }
 }

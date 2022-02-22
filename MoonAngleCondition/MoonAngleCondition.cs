@@ -165,14 +165,19 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             var observerInfo = new ObserverInfo() {
                 Latitude = profileService.ActiveProfile.AstrometrySettings.Latitude,
                 Longitude = profileService.ActiveProfile.AstrometrySettings.Longitude,
-                Height = profileService.ActiveProfile.AstrometrySettings.Elevation,
+                Elevation = profileService.ActiveProfile.AstrometrySettings.Elevation,
             };
 
             var weatherData = weatherDataMediator.GetInfo();
 
             if (weatherData?.Connected == true) {
-                observerInfo.Pressure = weatherData.Pressure;
-                observerInfo.Temperature = weatherData.Temperature;
+                if (!double.IsNaN(weatherData.Pressure)) {
+                    observerInfo.Pressure = weatherData.Pressure;
+                }
+
+                if (!double.IsNaN(weatherData.Temperature)) {
+                    observerInfo.Temperature = weatherData.Temperature;
+                }
             }
 
             TargetInfo = Utility.Utility.FindDsoInfo(this.Parent);
@@ -188,7 +193,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             var targetRaRadians = AstroUtil.ToRadians(TargetInfo.Coordinates.RADegrees);
             var targetDecRadians = AstroUtil.ToRadians(TargetInfo.Coordinates.Dec);
 
-            var theta = Utility.Utility.iauSeps(moonRaRadians, moonDecRadians, targetRaRadians, targetDecRadians);
+            var theta = SOFA.Seps(moonRaRadians, moonDecRadians, targetRaRadians, targetDecRadians);
 
             var thetaDegrees = AstroUtil.ToDegree(theta);
             Logger.Debug($"Moon angle: {thetaDegrees:0.00}");

@@ -79,7 +79,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Utility\ObserverInfo.cs" />
     <Compile Include="Utility\Utility.cs" />
     <Page Include="MoonAngleCondition\MoonAngleConditionTemplate.xaml">
       <SubType>Designer</SubType>
@@ -95,34 +94,34 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NINA.Astrometry">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.Core">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.Equipment">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.Image">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.MGEN">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.PlateSolving">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.Plugin">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.Profile">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.Sequencer">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
     <PackageReference Include="NINA.WPF.Base">
-      <Version>2.0.0.2021-beta</Version>
+      <Version>2.0.0.2048-beta</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
