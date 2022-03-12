@@ -54,6 +54,15 @@ using System.Runtime.InteropServices;
 
 This loop condition appears under the **Loop Condition** category of instructions.
 
+# Lorentzian Moon Avoidance #
+
+The **Lorentzian** option modifies the calculated target-moon separation angle based on the Lorentzian Moon Avoidance (LMA) algorithm, forumlated by the [Berkely Automated Imaging Telescope](https://w.astro.berkeley.edu/bait/) team.
+When enabled, N.I.N.A. will assume that the specified separation distance assumes a full moon at its most luminous phase. The LMA algorithm will use _current_ phase of the lunar cycle to reduce the specified separaration angle.
+The result is that the condition will allow imaging to take place closer to the moon the less full, and thus less bright, it is.
+
+The separation is reduced such that by **width** days before (or after) the full moon the specified separation distance will be halved. The default width of 14 days is a reasonable starting point.
+The calculation uses [the LMA formula](http://bobdenny.com/ar/RefDocs/HelpFiles/ACPScheduler81Help/Constraints.htm) provided, with thanks, by Bob Denny of [DC3 Dreams](http://dc3.com/).
+
 # Getting help #
 
 Help for this plugin may be found in the **#plugin-discussions** channel on the NINA project [Discord chat server](https://discord.gg/nighttime-imaging) or by filing an issue report at this plugin's [Github repository](https://github.com/daleghent/nina-moon-angle/issues).")]
