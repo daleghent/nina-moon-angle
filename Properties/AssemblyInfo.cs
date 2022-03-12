@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
+[assembly: AssemblyVersion("1.2.0.0")]
+[assembly: AssemblyFileVersion("1.2.0.0")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Moon Angle")]
@@ -62,6 +62,8 @@ The result is that the condition will allow imaging to take place closer to the 
 
 The separation is reduced such that by **width** days before (or after) the full moon the specified separation distance will be halved. The default width of 14 days is a reasonable starting point.
 The calculation uses [the LMA formula](http://bobdenny.com/ar/RefDocs/HelpFiles/ACPScheduler81Help/Constraints.htm) provided, with thanks, by Bob Denny of [DC3 Dreams](http://dc3.com/).
+
+Many thanks to Simon Kapadia for this implementation.
 
 # Getting help #
 
