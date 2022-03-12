@@ -38,12 +38,14 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
     [Export(typeof(ISequenceCondition))]
     [JsonObject(MemberSerialization.OptIn)]
     public class MoonAngleCondition : SequenceCondition, IValidatable {
-        private bool lorentzian = false;
-        private int width = 14;
-        private double currentSeparation = 0;
-        private double separationLimit = 20;
-        private double lseparation = 20;
+        private double separationLimit = 120;
         private ComparisonOperatorEnum comparisonOperator = ComparisonOperatorEnum.LESS_THAN_OR_EQUAL;
+        private bool lorentzian = false;
+        private int lorentzianWidth = 14;
+
+        private double actualSeparation = 0;
+        private double lorentzianSeparationLimit = 0;
+        private double effectiveSeparationLimit = 0;
 
         private readonly IProfileService profileService;
         private readonly IWeatherDataMediator weatherDataMediator;
@@ -62,35 +64,29 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
                 return;
             }
 
-            CurrentSeparation = CalculateMoonTargetSeparation();
+            ActualSeparation = CalculateMoonTargetSeparation();
+            UpdateLorentizanFactors();
+
             if (!Check(null, null)) {
                 if (this.Parent != null) {
                     if (ItemUtility.IsInRootContainer(Parent) && this.Parent.Status == SequenceEntityStatus.RUNNING) {
-                        Logger.Info($"Moon and target angular separation is outside the prescribed condition ({CurrentSeparation:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {SeparationLimit:0.00}) - Interrupting current Instruction Set");
+                        Logger.Info($"Moon and target angular separation is outside the prescribed condition ({effectiveSeparationLimit:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {SeparationLimit:0.00}, Lorentzian = {Lorentzian}) - Interrupting current Instruction Set");
                         await this.Parent.Interrupt();
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// The user-supplied separation limit, in degrees
+        /// </summary>
         [JsonProperty]
         public double SeparationLimit {
             get => separationLimit;
             set {
-                if (lorentzian) {
-                    Lseparation = value;
-                    value = LorentzianSeparation(value, width);
-                }
                 separationLimit = value < 0d ? 0 : value > 180d ? 180 : Math.Round(value, 2);
-                RaisePropertyChanged();
-            }
-        }
 
-        [JsonProperty]
-        public double Lseparation {
-            get => lseparation;
-            set {
-                lseparation = value;
+                UpdateLorentizanFactors();
                 RaisePropertyChanged();
             }
         }
@@ -101,6 +97,36 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             set {
                 comparisonOperator = value;
                 RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// Whether to modify the user-supplied separation limit using the Lorentzian Moon Avoidance algorithm
+        /// </summary>
+        [JsonProperty]
+        public bool Lorentzian {
+            get => lorentzian;
+            set {
+                lorentzian = value;
+
+                UpdateLorentizanFactors();
+                RaisePropertyChanged();
+            }
+        }
+
+        /// <summary>
+        /// The width (in days) parameter supplied to the Lorentzian Moon Avoidance algorithm
+        /// </summary>
+        [JsonProperty]
+        public int LorentzianWidth {
+            get => lorentzianWidth;
+            set {
+                if (value != lorentzianWidth) {
+                    lorentzianWidth = value < 0 ? 0 : value > 15 ? 15 : value;
+
+                    UpdateLorentizanFactors();
+                    RaisePropertyChanged();
+                }
             }
         }
 
@@ -115,32 +141,34 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             }
 
             bool result;
-            var currentSeparation = Math.Round(CurrentSeparation, 2);
-            Logger.Debug($"Parameters: {currentSeparation:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {SeparationLimit:0.00}");
+            var currentSeparation = Math.Round(ActualSeparation, 2);
+            var effectiveSeparationLimit = Lorentzian ? LorentzianSeparationLimit : SeparationLimit;
+
+            Logger.Debug($"Parameters: {effectiveSeparationLimit:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {currentSeparation:0.00} (Lorentzian = {lorentzian})");
 
             switch (ComparisonOperator) {
                 case ComparisonOperatorEnum.LESS_THAN:
-                    result = currentSeparation < SeparationLimit;
+                    result = currentSeparation < effectiveSeparationLimit;
                     break;
 
                 case ComparisonOperatorEnum.LESS_THAN_OR_EQUAL:
-                    result = currentSeparation <= SeparationLimit;
+                    result = currentSeparation <= effectiveSeparationLimit;
                     break;
 
                 case ComparisonOperatorEnum.EQUALS:
-                    result = currentSeparation == SeparationLimit;
+                    result = currentSeparation == effectiveSeparationLimit;
                     break;
 
                 case ComparisonOperatorEnum.GREATER_THAN_OR_EQUAL:
-                    result = currentSeparation >= SeparationLimit;
+                    result = currentSeparation >= effectiveSeparationLimit;
                     break;
 
                 case ComparisonOperatorEnum.GREATER_THAN:
-                    result = currentSeparation > SeparationLimit;
+                    result = currentSeparation > effectiveSeparationLimit;
                     break;
 
                 case ComparisonOperatorEnum.NOT_EQUAL:
-                    result = currentSeparation != SeparationLimit;
+                    result = currentSeparation != effectiveSeparationLimit;
                     break;
 
                 default:
@@ -150,26 +178,24 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             return !result;
         }
 
-        public double CurrentSeparation {
-            get => currentSeparation;
+        /// <summary>
+        /// The true angular distance between the target and the moon
+        /// </summary>
+        public double ActualSeparation {
+            get => actualSeparation;
             private set {
-                currentSeparation = value;
+                actualSeparation = value;
                 RaisePropertyChanged();
             }
         }
 
-        public bool Lorentzian {
-            get => lorentzian;
+        /// <summary>
+        /// The separation limit as modified by the Lorentizan Moon Avoidance algorithm
+        /// </summary>
+        public double LorentzianSeparationLimit {
+            get => lorentzianSeparationLimit;
             set {
-                lorentzian = value;
-                RaisePropertyChanged();
-            }
-        }
-
-        public int Width {
-            get => width;
-            set {
-                width = value;
+                lorentzianSeparationLimit = value;
                 RaisePropertyChanged();
             }
         }
@@ -214,7 +240,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             return observerInfo;
         }
 
-        private double LorentzianSeparation(double distance, int width) {
+        private double CalculateLorentzianSeparation(double distance, int width) {
             // Moon-Avoidance Lorentzian formulated by the Berkeley Automated Imaging Telescope (BAIT) team
             // Formula borrowed from ACP http://bobdenny.com/ar/RefDocs/HelpFiles/ACPScheduler81Help/Constraints.htm
 
@@ -227,7 +253,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             var moonage = moonPosition.RA / LUNARCYCLE;
 
             // distance/(1+(0.5 - age/width)^2)
-            var separation = distance / (1 + (Math.Pow((0.5 - moonage / width), 2)));
+            var separation = distance / (1 + Math.Pow(0.5 - (moonage / width), 2));
 
             return separation;
         }
@@ -256,6 +282,12 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             return thetaDegrees;
         }
 
+        private void UpdateLorentizanFactors() {
+            if (Lorentzian) {
+                LorentzianSeparationLimit = CalculateLorentzianSeparation(separationLimit, lorentzianWidth);
+            }
+        }
+
         public MoonAngleCondition(MoonAngleCondition copyMe) : this(copyMe.profileService, copyMe.weatherDataMediator) {
             CopyMetaData(copyMe);
         }
@@ -278,7 +310,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
         }
 
         public override string ToString() {
-            return $"Condition: {nameof(MoonAngleCondition)}, {CurrentSeparation:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {SeparationLimit:0.00}";
+            return $"Condition: {nameof(MoonAngleCondition)}, {ActualSeparation:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {effectiveSeparationLimit:0.00}";
         }
     }
 }
