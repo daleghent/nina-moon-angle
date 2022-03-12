@@ -38,6 +38,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
     [Export(typeof(ISequenceCondition))]
     [JsonObject(MemberSerialization.OptIn)]
     public class MoonAngleCondition : SequenceCondition, IValidatable {
+        private bool lorentzian = false;
         private double currentSeparation = 0;
         private double separationLimit = 20;
         private ComparisonOperatorEnum comparisonOperator = ComparisonOperatorEnum.LESS_THAN_OR_EQUAL;
@@ -74,6 +75,9 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
         public double SeparationLimit {
             get => separationLimit;
             set {
+                if (lorentzian) {
+                    value = LorentzianSeparation(value, 14);
+                }
                 separationLimit = value < 0d ? 0 : value > 180d ? 180 : Math.Round(value, 2);
                 RaisePropertyChanged();
             }
@@ -142,6 +146,14 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             }
         }
 
+        public bool Lorentzian {
+            get => lorentzian;
+            set {
+                lorentzian = value;
+                RaisePropertyChanged();
+            }
+        }
+
         private DeepSkyObject TargetInfo { get; set; } = null;
 
         public IList<string> Issues { get; set; } = new ObservableCollection<string>();
@@ -159,6 +171,25 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             }
 
             return i.Count == 0;
+        }
+
+        private double LorentzianSeparation(double distance, int width) {
+            // Moon-Avoidance Lorentzian formulated by the Berkeley Automated Imaging Telescope (BAIT) team
+            // Formula borrowed from ACP http://bobdenny.com/ar/RefDocs/HelpFiles/ACPScheduler81Help/Constraints.htm
+            var observerInfo = new ObserverInfo() {
+                Latitude = profileService.ActiveProfile.AstrometrySettings.Latitude,
+                Longitude = profileService.ActiveProfile.AstrometrySettings.Longitude,
+                Elevation = profileService.ActiveProfile.AstrometrySettings.Elevation,
+            };
+            var date = DateTime.UtcNow;
+            var jd = AstroUtil.GetJulianDate(date);
+            var moonPosition = Utility.Utility.GetMoonPosition(date, jd, observerInfo);
+            var moonage = moonPosition.RA / 29.53058770576;
+
+            // distance/(1+(0.5 - age/width)^2)
+            var separation = distance / (1 + (Math.Pow((0.5 - moonage / width), 2)));
+
+            return separation;
         }
 
         private double CalculateMoonTargetSeparation() {
