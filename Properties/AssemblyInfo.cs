@@ -54,6 +54,11 @@ using System.Runtime.InteropServices;
 
 This loop condition appears under the **Loop Condition** category of instructions.
 
+The switch labelled **Lorentzian** enables modification of the submitted angle based on the Lorentzian Moon Avoidance algorithm forumlated by the Berkely Automated Imaging Telescope team.
+When enabled, N.I.N.A. will assume that the desired angular distance is that required under a full moon; it will calculate the current position in the lunar cycle and reduce the angle
+such that at **width** days before (or after) the full moon the angular distance will be halved.  The default width of 14 is a reasonable starting point.
+The calculation uses the formula provided at http://bobdenny.com/ar/RefDocs/HelpFiles/ACPScheduler81Help/Constraints.htm with thanks.
+
 # Getting help #
 
 Help for this plugin may be found in the **#plugin-discussions** channel on the NINA project [Discord chat server](https://discord.gg/nighttime-imaging) or by filing an issue report at this plugin's [Github repository](https://github.com/daleghent/nina-moon-angle/issues).")]
@@ -67,4 +72,4 @@ Help for this plugin may be found in the **#plugin-discussions** channel on the 
 // [Unused]
 [assembly: AssemblyTrademark("")]
 // [Unused]
-[assembly: AssemblyCulture("")] 
+[assembly: AssemblyCulture("")]

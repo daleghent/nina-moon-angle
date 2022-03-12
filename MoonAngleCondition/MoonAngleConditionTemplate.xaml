@@ -63,6 +63,35 @@
                         Height="20"
                         Margin="5,0,0,0"
                         IsChecked="{Binding Lorentzian, Mode=TwoWay}" />
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="Width: ">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Lorentzian}" Value="False">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBox
+                        MinWidth="40"
+                        Margin="5,0,0,0"
+                        Text="{Binding Width}"
+                        TextAlignment="Right">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Lorentzian}" Value="False">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
                 </StackPanel>
             </nina:SequenceBlockView.SequenceItemContent>
 
