@@ -66,6 +66,34 @@
                     <TextBlock
                         Margin="5,0,0,0"
                         VerticalAlignment="Center"
+                        Text="Distance: ">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Lorentzian}" Value="False">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
+                        Text="{Binding Lseparation}">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Lorentzian}" Value="False">
+                                        <Setter Property="Visibility" Value="Hidden" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                    <TextBlock
+                        Margin="5,0,0,0"
+                        VerticalAlignment="Center"
                         Text="Width: ">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">

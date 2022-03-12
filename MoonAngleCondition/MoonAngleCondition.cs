@@ -42,6 +42,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
         private int width = 14;
         private double currentSeparation = 0;
         private double separationLimit = 20;
+        private double lseparation = 20;
         private ComparisonOperatorEnum comparisonOperator = ComparisonOperatorEnum.LESS_THAN_OR_EQUAL;
 
         private readonly IProfileService profileService;
@@ -77,9 +78,19 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             get => separationLimit;
             set {
                 if (lorentzian) {
+                    Lseparation = value;
                     value = LorentzianSeparation(value, width);
                 }
                 separationLimit = value < 0d ? 0 : value > 180d ? 180 : Math.Round(value, 2);
+                RaisePropertyChanged();
+            }
+        }
+
+        [JsonProperty]
+        public double Lseparation {
+            get => lseparation;
+            set {
+                lseparation = value;
                 RaisePropertyChanged();
             }
         }
