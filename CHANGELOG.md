@@ -1,7 +1,7 @@
 ﻿# Moon angle
 
 ## 1.2.0.0 - 2022-03-12
-* Implemented optional dynamic adjustment of the specified separation limit based on the Lorentzian Moon Avoidance algorithm. Activating this option will cause the Moon Angle condition to assume that the specified limit pertains to a full moon. It will reduce the limit distance as the moon phase gets closer to a new moon. See the plugin Description for more information. Many thanks to Simon Kapadia for providing this improvement.
+* Implemented optional dynamic adjustment of the specified separation limit based on the **Lorentzian Moon Avoidance** algorithm. Activating this option will cause the Moon Angle condition to assume that the specified limit is the desired separation during a full moon. It will then reduce the limit distance as the moon phase gets closer to a new moon, with the separation distance during a new moon being reduced to half of the the specified separation limit. See the plugin Description for more information. Many thanks to Simon Kapadia for providing this improvement.
 
 ## 1.1.0.0 - 2022-02-22
 * Migrated plugin to use new NINA `ObserverInfo` object with standardized defaults for temperature and air pressure
