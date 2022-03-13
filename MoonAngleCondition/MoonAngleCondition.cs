@@ -13,6 +13,7 @@
 using DaleGhent.NINA.MoonAngle.Utility;
 using Newtonsoft.Json;
 using NINA.Astrometry;
+using NINA.Astrometry.Interfaces;
 using NINA.Core.Enum;
 using NINA.Core.Utility;
 using NINA.Equipment.Interfaces.Mediator;
@@ -200,7 +201,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             }
         }
 
-        private DeepSkyObject TargetInfo { get; set; } = null;
+        private IDeepSkyObject TargetInfo { get; set; } = null;
 
         public IList<string> Issues { get; set; } = new ObservableCollection<string>();
 

@@ -1,5 +1,9 @@
 ﻿# Moon angle
 
+## 1.3.0.0 - 2022-03-13
+* Updated to support changes to DSO containers in NINA 2.0 beta 50
+* Minimum supported NINA version is now 2.0 Beta 50
+
 ## 1.2.0.0 - 2022-03-12
 * Implemented optional dynamic adjustment of the specified separation limit based on the **Lorentzian Moon Avoidance** algorithm. Activating this option will cause the Moon Angle condition to assume that the specified limit is the desired separation during a full moon. It will then reduce the limit distance as the moon phase gets closer to a new moon, with the separation distance during a new moon being reduced to half of the the specified separation limit. See the plugin Description for more information. Many thanks to Simon Kapadia for providing this improvement.
 

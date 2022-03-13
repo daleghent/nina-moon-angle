@@ -11,6 +11,7 @@
 #endregion "copyright"
 
 using NINA.Astrometry;
+using NINA.Astrometry.Interfaces;
 using NINA.Core.Enum;
 using NINA.Core.Utility;
 using NINA.Sequencer.Container;
@@ -57,8 +58,8 @@ namespace DaleGhent.NINA.MoonAngle.Utility {
             return moonPosition;
         }
 
-        public static DeepSkyObject FindDsoInfo(ISequenceContainer container) {
-            DeepSkyObject target = null;
+        public static IDeepSkyObject FindDsoInfo(ISequenceContainer container) {
+            IDeepSkyObject target = null;
             ISequenceContainer acontainer = container;
 
             while (acontainer != null) {
