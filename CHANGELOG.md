@@ -1,5 +1,8 @@
 ﻿# Moon angle
 
+## 1.4.0.0 - 2022-04-22
+* Adjusted the logging level of some messages from debug to trace. There is no other functional change.
+
 ## 1.3.0.0 - 2022-03-13
 * Updated to support changes to DSO containers in NINA 2.0 beta 50
 * Minimum supported NINA version is now 2.0 Beta 50
