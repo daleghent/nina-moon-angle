@@ -53,7 +53,7 @@ namespace DaleGhent.NINA.MoonAngle.Utility {
             var jdTt = jd + AstroUtil.SecondsToDays(deltaT);
             _ = NOVAS.Place(jdTt, moon, obs, deltaT, NOVAS.CoordinateSystem.EquinoxOfDate, NOVAS.Accuracy.Full, ref moonPosition);
 
-            Logger.Debug($"Moon RA: {AstroUtil.HoursToHMS(moonPosition.RA)}, Dec: {AstroUtil.DegreesToDMS(moonPosition.Dec)}");
+            Logger.Trace($"Moon RA: {AstroUtil.HoursToHMS(moonPosition.RA)}, Dec: {AstroUtil.DegreesToDMS(moonPosition.Dec)}");
 
             return moonPosition;
         }

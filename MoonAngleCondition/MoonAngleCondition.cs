@@ -145,7 +145,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             var currentSeparation = Math.Round(ActualSeparation, 2);
             var effectiveSeparationLimit = Lorentzian ? LorentzianSeparationLimit : SeparationLimit;
 
-            Logger.Debug($"Parameters: {effectiveSeparationLimit:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {currentSeparation:0.00} (Lorentzian = {lorentzian})");
+            Logger.Trace($"Parameters: {effectiveSeparationLimit:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {currentSeparation:0.00} (Lorentzian = {lorentzian})");
 
             switch (ComparisonOperator) {
                 case ComparisonOperatorEnum.LESS_THAN:
@@ -311,7 +311,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
         }
 
         public override string ToString() {
-            return $"Condition: {nameof(MoonAngleCondition)}, {ActualSeparation:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {effectiveSeparationLimit:0.00}";
+            return $"Condition: {nameof(MoonAngleCondition)}: {ActualSeparation:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {effectiveSeparationLimit:0.00}, Lorentzian = {lorentzian}";
         }
     }
 }
