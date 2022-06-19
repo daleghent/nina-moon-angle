@@ -1,5 +1,12 @@
 ﻿# Moon angle
 
+## 1.5.0.0 - 2022-06-19
+* `SUNANGLE` and `MOONANGL` FITS keywords to all non-DARK and non-BIAS type exposures. The definitions for these keywords may be found in the HEASARC [Dictionary of Commonly Used FITS Keywords](https://heasarc.gsfc.nasa.gov/docs/fcg/common_dict.html)
+* `$$SUNANGLE$$` and `$$MOONANGLE$$` file name patterns
+* Minimum supported NINA version is now 2.0.1 (2.0 HF1)
+
+For exposures taken during a sequence, the angular sparation that is recorded in the FITS keywords and file patterns will be measured from the object of interest. If the exposure is taken outside of a sequence, such as manual exposures made from the Imaging window, the angular separation will be measured from the pointing coordinates reported by the mount.
+
 ## 1.4.0.0 - 2022-04-22
 * Adjusted the logging level of some messages from debug to trace. There is no other functional change.
 

@@ -6,8 +6,8 @@ using System.Runtime.InteropServices;
 
 // [MANDATORY] The assembly versioning
 //Should be incremented for each new release build of a plugin
-[assembly: AssemblyVersion("1.4.0.0")]
-[assembly: AssemblyFileVersion("1.4.0.0")]
+[assembly: AssemblyVersion("1.5.0.0")]
+[assembly: AssemblyFileVersion("1.5.0.0")]
 
 // [MANDATORY] The name of your plugin
 [assembly: AssemblyTitle("Moon Angle")]
@@ -23,7 +23,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCopyright("Copyright © 2022 Dale Ghent")]
 
 // The minimum Version of N.I.N.A. that this plugin is compatible with
-[assembly: AssemblyMetadata("MinimumApplicationVersion", "2.0.0.2050")]
+[assembly: AssemblyMetadata("MinimumApplicationVersion", "2.0.1.2001")]
 
 // The license your plugin code is using
 [assembly: AssemblyMetadata("License", "MPL-2.0")]
@@ -54,6 +54,14 @@ using System.Runtime.InteropServices;
 
 This loop condition appears under the **Loop Condition** category of instructions.
 
+# FITS keywords and file name patterns #
+
+This plugin adds:
+* `SUNANGLE` and `MOONANGL` FITS keywords to all non-DARK and non-BIAS type exposures. The definitions for these keywords may be found in the HEASARC [Dictionary of Commonly Used FITS Keywords](https://heasarc.gsfc.nasa.gov/docs/fcg/common_dict.html).
+* `$$SUNANGLE$$` and `$$MOONANGLE$$` file name patterns.
+
+For exposures taken during a sequence, the angular sparation that is recorded in the FITS keywords and file patterns will be measured from the object of interest. If the exposure is taken outside of a sequence, such as manual exposures made from the Imaging window, the angular separation will be measured from the pointing coordinates reported by the mount.
+
 # Lorentzian Moon Avoidance #
 
 The **Lorentzian** option modifies the calculated target-moon separation angle based on the Lorentzian Moon Avoidance (LMA) algorithm, forumlated by the [Berkely Automated Imaging Telescope](https://w.astro.berkeley.edu/bait/) team.
@@ -78,4 +86,4 @@ Help for this plugin may be found in the **#plugin-discussions** channel on the 
 // [Unused]
 [assembly: AssemblyTrademark("")]
 // [Unused]
-[assembly: AssemblyCulture("")] 
+[assembly: AssemblyCulture("")]

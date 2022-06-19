@@ -10,7 +10,6 @@
 
 #endregion "copyright"
 
-using DaleGhent.NINA.MoonAngle.Utility;
 using Newtonsoft.Json;
 using NINA.Astrometry;
 using NINA.Astrometry.Interfaces;
@@ -65,13 +64,13 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
                 return;
             }
 
-            ActualSeparation = CalculateMoonTargetSeparation();
+            ActualSeparation = Utility.CalculateMoonSeparation(TargetInfo.Coordinates, GetObserverInfo());
             UpdateLorentizanFactors();
 
             if (!Check(null, null)) {
                 if (this.Parent != null) {
                     if (ItemUtility.IsInRootContainer(Parent) && this.Parent.Status == SequenceEntityStatus.RUNNING) {
-                        Logger.Info($"Moon and target angular separation is outside the prescribed condition ({effectiveSeparationLimit:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {SeparationLimit:0.00}, Lorentzian = {Lorentzian}) - Interrupting current Instruction Set");
+                        Logger.Info($"Moon and target angular separation is outside the prescribed condition ({effectiveSeparationLimit:0.00} {Utility.PrintComparator(ComparisonOperator)} {SeparationLimit:0.00}, Lorentzian = {Lorentzian}) - Interrupting current Instruction Set");
                         await this.Parent.Interrupt();
                     }
                 }
@@ -145,7 +144,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             var currentSeparation = Math.Round(ActualSeparation, 2);
             var effectiveSeparationLimit = Lorentzian ? LorentzianSeparationLimit : SeparationLimit;
 
-            Logger.Trace($"Parameters: {effectiveSeparationLimit:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {currentSeparation:0.00} (Lorentzian = {lorentzian})");
+            Logger.Trace($"Parameters: {effectiveSeparationLimit:0.00} {Utility.PrintComparator(ComparisonOperator)} {currentSeparation:0.00} (Lorentzian = {lorentzian})");
 
             switch (ComparisonOperator) {
                 case ComparisonOperatorEnum.LESS_THAN:
@@ -250,37 +249,13 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             var observerInfo = GetObserverInfo();
             var date = DateTime.UtcNow;
             var jd = AstroUtil.GetJulianDate(date);
-            var moonPosition = Utility.Utility.GetMoonPosition(date, jd, observerInfo);
+            var moonPosition = Utility.GetMoonPosition(date, jd, observerInfo);
             var moonage = moonPosition.RA / LUNARCYCLE;
 
             // distance/(1+(0.5 - age/width)^2)
             var separation = distance / (1 + Math.Pow(0.5 - (moonage / width), 2));
 
             return separation;
-        }
-
-        private double CalculateMoonTargetSeparation() {
-            var observerInfo = GetObserverInfo();
-
-            TargetInfo = Utility.Utility.FindDsoInfo(this.Parent);
-
-            var date = DateTime.UtcNow;
-            var jd = AstroUtil.GetJulianDate(date);
-            var moonPosition = Utility.Utility.GetMoonPosition(date, jd, observerInfo);
-
-            var moonRaRadians = AstroUtil.ToRadians(AstroUtil.HoursToDegrees(moonPosition.RA));
-            var moonDecRadians = AstroUtil.ToRadians(moonPosition.Dec);
-
-            TargetInfo.Coordinates.Transform(Epoch.JNOW);
-            var targetRaRadians = AstroUtil.ToRadians(TargetInfo.Coordinates.RADegrees);
-            var targetDecRadians = AstroUtil.ToRadians(TargetInfo.Coordinates.Dec);
-
-            var theta = SOFA.Seps(moonRaRadians, moonDecRadians, targetRaRadians, targetDecRadians);
-
-            var thetaDegrees = AstroUtil.ToDegree(theta);
-            Logger.Debug($"Moon angle: {thetaDegrees:0.00}");
-
-            return thetaDegrees;
         }
 
         private void UpdateLorentizanFactors() {
@@ -306,12 +281,12 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
         }
 
         public override void AfterParentChanged() {
-            TargetInfo = Utility.Utility.FindDsoInfo(this.Parent);
+            TargetInfo = Utility.FindDsoInfo(this.Parent);
             RunWatchdogIfInsideSequenceRoot();
         }
 
         public override string ToString() {
-            return $"Condition: {nameof(MoonAngleCondition)}: {ActualSeparation:0.00} {Utility.Utility.PrintComparator(ComparisonOperator)} {effectiveSeparationLimit:0.00}, Lorentzian = {lorentzian}";
+            return $"Condition: {nameof(MoonAngleCondition)}: {ActualSeparation:0.00} {Utility.PrintComparator(ComparisonOperator)} {effectiveSeparationLimit:0.00}, Lorentzian = {lorentzian}";
         }
     }
 }
