@@ -272,6 +272,8 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             return new MoonAngleCondition(this) {
                 SeparationLimit = SeparationLimit,
                 ComparisonOperator = ComparisonOperator,
+                Lorentzian = Lorentzian,
+                LorentzianWidth = LorentzianWidth,
             };
         }
 

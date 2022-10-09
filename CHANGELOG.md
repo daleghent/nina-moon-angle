@@ -1,5 +1,8 @@
 ﻿# Moon angle
 
+## 1.5.1.0 - 2022-10-09
+* Bugfix: The Lorentzian on/off and Lorentzian Width parameters are now saved in templates
+
 ## 1.5.0.0 - 2022-06-19
 * `SUNANGLE` and `MOONANGL` FITS keywords to all non-DARK and non-BIAS type exposures. The definitions for these keywords may be found in the HEASARC [Dictionary of Commonly Used FITS Keywords](https://heasarc.gsfc.nasa.gov/docs/fcg/common_dict.html)
 * `$$SUNANGLE$$` and `$$MOONANGLE$$` file name patterns
