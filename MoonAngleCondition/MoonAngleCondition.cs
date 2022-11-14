@@ -144,7 +144,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             var currentSeparation = Math.Round(ActualSeparation, 2);
             var effectiveSeparationLimit = Lorentzian ? LorentzianSeparationLimit : SeparationLimit;
 
-            Logger.Trace($"Parameters: {effectiveSeparationLimit:0.00} {Utility.PrintComparator(ComparisonOperator)} {currentSeparation:0.00} (Lorentzian = {lorentzian})");
+            Logger.Trace($"Parameters: {currentSeparation:0.00} {Utility.PrintComparator(ComparisonOperator)}  {effectiveSeparationLimit:0.00} (Lorentzian = {lorentzian})");
 
             switch (ComparisonOperator) {
                 case ComparisonOperatorEnum.LESS_THAN:
@@ -240,20 +240,23 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             return observerInfo;
         }
 
-        private double CalculateLorentzianSeparation(double distance, int width) {
+        private static double CalculateLorentzianSeparation(double distance, int width) {
             // Moon-Avoidance Lorentzian formulated by the Berkeley Automated Imaging Telescope (BAIT) team
             // Formula borrowed from ACP http://bobdenny.com/ar/RefDocs/HelpFiles/ACPScheduler81Help/Constraints.htm
 
-            const double LUNARCYCLE = 29.53058770576;
+            const double LUNAR_MONTH = 29.53058770576;
 
-            var observerInfo = GetObserverInfo();
-            var date = DateTime.UtcNow;
-            var jd = AstroUtil.GetJulianDate(date);
-            var moonPosition = Utility.GetMoonPosition(date, jd, observerInfo);
-            var moonage = moonPosition.RA / LUNARCYCLE;
+            var lAge = (AstroUtil.GetJulianDate(DateTime.UtcNow) - 2451550.1) / LUNAR_MONTH;
+            var moonAgePct = lAge - Math.Floor(lAge);
 
-            // distance/(1+(0.5 - age/width)^2)
-            var separation = distance / (1 + Math.Pow(0.5 - (moonage / width), 2));
+            if (moonAgePct < 0) {
+                moonAgePct += 1;
+            }
+
+            var moonAgeDays = moonAgePct * LUNAR_MONTH;
+            var separation = distance / (1d + Math.Pow((0.5 - (moonAgeDays / LUNAR_MONTH)) / (width / LUNAR_MONTH), 2));
+
+            Logger.Trace($"Moon age (%): {moonAgePct * 100:N2}, Moon age (days): {moonAgeDays:N4}, Width: {width}, Original separation: {distance:N2}, Lorentzian-adjusted: {separation:N2}");
 
             return separation;
         }

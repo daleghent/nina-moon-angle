@@ -40,7 +40,7 @@ namespace DaleGhent.NINA.MoonAngle {
             var theta = SOFA.Seps(moonRaRadians, moonDecRadians, targetRaRadians, targetDecRadians);
 
             var thetaDegrees = AstroUtil.ToDegree(theta);
-            Logger.Debug($"Moon angle: {thetaDegrees:0.00}");
+            Logger.Trace($"Moon angle: {thetaDegrees:0.00}");
 
             return thetaDegrees;
         }
