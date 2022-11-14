@@ -1,5 +1,9 @@
 ﻿# Moon angle
 
+## 1.6.0.0 - 2022-11-13
+* Fixed Lorentzian separation math
+* Reduced logging level of one message from Debug to Trace
+
 ## 1.5.1.0 - 2022-10-09
 * Bugfix: The Lorentzian on/off and Lorentzian Width parameters are now saved in templates
 
