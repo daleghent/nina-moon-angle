@@ -41,8 +41,6 @@ namespace DaleGhent.NINA.MoonAngle {
                     break;
             }
 
-            Logger.Trace($"{toObject} RA: {AstroUtil.HoursToHMS(sepObjectPosition.RA)}, Dec: {AstroUtil.DegreesToDMS(sepObjectPosition.Dec)}");
-
             var sepObjectRaRadians = AstroUtil.ToRadians(AstroUtil.HoursToDegrees(sepObjectPosition.RA));
             var sepObjectDecRadians = AstroUtil.ToRadians(sepObjectPosition.Dec);
 
@@ -53,7 +51,8 @@ namespace DaleGhent.NINA.MoonAngle {
             var theta = SOFA.Seps(sepObjectRaRadians, sepObjectDecRadians, targetRaRadians, targetDecRadians);
 
             var thetaDegrees = AstroUtil.ToDegree(theta);
-            Logger.Trace($"{toObject} angle: {thetaDegrees:0.00}");
+
+            Logger.Trace($"{toObject} RA: {AstroUtil.HoursToHMS(sepObjectPosition.RA)}, Dec: {AstroUtil.DegreesToDMS(sepObjectPosition.Dec)}, True angle: {thetaDegrees:0.00}");
 
             return thetaDegrees;
         }
