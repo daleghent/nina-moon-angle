@@ -94,13 +94,13 @@ namespace DaleGhent.NINA.MoonAngle {
 
                 if (!e.Image.MetaData.Image.ImageType.Equals("SNAPSHOT")) {
                     if (e.Image.MetaData.Target.Coordinates != null && !double.IsNaN(e.Image.MetaData.Target.Coordinates.Dec) && !double.IsNaN(e.Image.MetaData.Target.Coordinates.RADegrees)) {
-                        e.Image.MetaData.GenericHeaders.Add(new DoubleMetaDataHeader(sunAngleKeywordName, Utility.CalculateSunSeparation(e.Image.MetaData.Target.Coordinates, observerInfo), string.Format(sunAngleKeywordComment, "object")));
-                        e.Image.MetaData.GenericHeaders.Add(new DoubleMetaDataHeader(moonAngleKeywordName, Utility.CalculateMoonSeparation(e.Image.MetaData.Target.Coordinates, observerInfo), string.Format(moonAngleKeywordComment, "object")));
+                        e.Image.MetaData.GenericHeaders.Add(new DoubleMetaDataHeader(sunAngleKeywordName, Utility.CalculateTargetSeparation(e.Image.MetaData.Target.Coordinates, Enums.SepObject.Sun, observerInfo), string.Format(sunAngleKeywordComment, "object")));
+                        e.Image.MetaData.GenericHeaders.Add(new DoubleMetaDataHeader(moonAngleKeywordName, Utility.CalculateTargetSeparation(e.Image.MetaData.Target.Coordinates, Enums.SepObject.Moon, observerInfo), string.Format(moonAngleKeywordComment, "object")));
                     }
                 } else {
                     if (e.Image.MetaData.Telescope.Coordinates != null && !double.IsNaN(e.Image.MetaData.Telescope.Coordinates.Dec) && !double.IsNaN(e.Image.MetaData.Telescope.Coordinates.RADegrees)) {
-                        e.Image.MetaData.GenericHeaders.Add(new DoubleMetaDataHeader(sunAngleKeywordName, Utility.CalculateSunSeparation(e.Image.MetaData.Telescope.Coordinates, observerInfo), string.Format(sunAngleKeywordComment, "center")));
-                        e.Image.MetaData.GenericHeaders.Add(new DoubleMetaDataHeader(moonAngleKeywordName, Utility.CalculateMoonSeparation(e.Image.MetaData.Telescope.Coordinates, observerInfo), string.Format(moonAngleKeywordComment, "center")));
+                        e.Image.MetaData.GenericHeaders.Add(new DoubleMetaDataHeader(sunAngleKeywordName, Utility.CalculateTargetSeparation(e.Image.MetaData.Telescope.Coordinates, Enums.SepObject.Sun, observerInfo), string.Format(sunAngleKeywordComment, "center")));
+                        e.Image.MetaData.GenericHeaders.Add(new DoubleMetaDataHeader(moonAngleKeywordName, Utility.CalculateTargetSeparation(e.Image.MetaData.Telescope.Coordinates, Enums.SepObject.Moon, observerInfo), string.Format(moonAngleKeywordComment, "center")));
                     }
                 }
             }
@@ -120,16 +120,16 @@ namespace DaleGhent.NINA.MoonAngle {
 
                 if (!e.Image.RawImageData.MetaData.Image.ImageType.Equals("SNAPSHOT")) {
                     if (e.Image.RawImageData.MetaData.Target.Coordinates != null && !double.IsNaN(e.Image.RawImageData.MetaData.Target.Coordinates.Dec) && !double.IsNaN(e.Image.RawImageData.MetaData.Target.Coordinates.RADegrees)) {
-                        var sunSep = Utility.CalculateSunSeparation(e.Image.RawImageData.MetaData.Target.Coordinates, observerInfo);
-                        var moonSep = Utility.CalculateMoonSeparation(e.Image.RawImageData.MetaData.Target.Coordinates, observerInfo);
+                        var sunSep = Utility.CalculateTargetSeparation(e.Image.RawImageData.MetaData.Target.Coordinates, Enums.SepObject.Sun, observerInfo);
+                        var moonSep = Utility.CalculateTargetSeparation(e.Image.RawImageData.MetaData.Target.Coordinates, Enums.SepObject.Moon, observerInfo);
 
                         e.AddImagePattern(new ImagePattern(imagePatternSun.Key, imagePatternSun.Description, imagePatternSun.Category) { Value = $"{sunSep:0.00}" });
                         e.AddImagePattern(new ImagePattern(imagePatternMoon.Key, imagePatternMoon.Description, imagePatternMoon.Category) { Value = $"{moonSep:0.00}" });
                     }
                 } else {
                     if (e.Image.RawImageData.MetaData.Telescope.Coordinates != null && !double.IsNaN(e.Image.RawImageData.MetaData.Telescope.Coordinates.Dec) && !double.IsNaN(e.Image.RawImageData.MetaData.Telescope.Coordinates.RADegrees)) {
-                        var sunSep = Utility.CalculateSunSeparation(e.Image.RawImageData.MetaData.Telescope.Coordinates, observerInfo);
-                        var moonSep = Utility.CalculateMoonSeparation(e.Image.RawImageData.MetaData.Telescope.Coordinates, observerInfo);
+                        var sunSep = Utility.CalculateTargetSeparation(e.Image.RawImageData.MetaData.Telescope.Coordinates, Enums.SepObject.Sun, observerInfo);
+                        var moonSep = Utility.CalculateTargetSeparation(e.Image.RawImageData.MetaData.Telescope.Coordinates, Enums.SepObject.Moon, observerInfo);
 
                         e.AddImagePattern(new ImagePattern(imagePatternSun.Key, imagePatternSun.Description, imagePatternSun.Category) { Value = $"{sunSep:0.00}" });
                         e.AddImagePattern(new ImagePattern(imagePatternMoon.Key, imagePatternMoon.Description, imagePatternMoon.Category) { Value = $"{moonSep:0.00}" });

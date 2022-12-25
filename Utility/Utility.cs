@@ -25,46 +25,35 @@ namespace DaleGhent.NINA.MoonAngle {
 
     internal static class Utility {
 
-        public static double CalculateMoonSeparation(Coordinates coordinates, ObserverInfo observerInfo) {
+        public static double CalculateTargetSeparation(Coordinates targetCoordinates, Enums.SepObject toObject, ObserverInfo observerInfo) {
             var date = DateTime.UtcNow;
             var jd = AstroUtil.GetJulianDate(date);
-            var moonPosition = AstroUtil.GetMoonPosition(date, jd, observerInfo);
 
-            Logger.Trace($"Moon RA: {AstroUtil.HoursToHMS(moonPosition.RA)}, Dec: {AstroUtil.DegreesToDMS(moonPosition.Dec)}");
+            var sepObjectPosition = new NOVAS.SkyPosition();
 
-            var moonRaRadians = AstroUtil.ToRadians(AstroUtil.HoursToDegrees(moonPosition.RA));
-            var moonDecRadians = AstroUtil.ToRadians(moonPosition.Dec);
+            switch (toObject) {
+                case Enums.SepObject.Moon:
+                    sepObjectPosition = AstroUtil.GetMoonPosition(date, jd, observerInfo);
+                    break;
 
-            _ = coordinates.Transform(Epoch.JNOW);
-            var targetRaRadians = AstroUtil.ToRadians(coordinates.RADegrees);
-            var targetDecRadians = AstroUtil.ToRadians(coordinates.Dec);
+                case Enums.SepObject.Sun:
+                    sepObjectPosition = AstroUtil.GetSunPosition(date, jd, observerInfo);
+                    break;
+            }
 
-            var theta = SOFA.Seps(moonRaRadians, moonDecRadians, targetRaRadians, targetDecRadians);
+            Logger.Trace($"{toObject} RA: {AstroUtil.HoursToHMS(sepObjectPosition.RA)}, Dec: {AstroUtil.DegreesToDMS(sepObjectPosition.Dec)}");
 
-            var thetaDegrees = AstroUtil.ToDegree(theta);
-            Logger.Trace($"Moon angle: {thetaDegrees:0.00}");
+            var sepObjectRaRadians = AstroUtil.ToRadians(AstroUtil.HoursToDegrees(sepObjectPosition.RA));
+            var sepObjectDecRadians = AstroUtil.ToRadians(sepObjectPosition.Dec);
 
-            return thetaDegrees;
-        }
+            _ = targetCoordinates.Transform(Epoch.JNOW);
+            var targetRaRadians = AstroUtil.ToRadians(targetCoordinates.RADegrees);
+            var targetDecRadians = AstroUtil.ToRadians(targetCoordinates.Dec);
 
-        public static double CalculateSunSeparation(Coordinates coordinates, ObserverInfo observerInfo) {
-            var date = DateTime.UtcNow;
-            var jd = AstroUtil.GetJulianDate(date);
-            var sunPosition = AstroUtil.GetSunPosition(date, jd, observerInfo);
-
-            Logger.Trace($"Sun RA: {AstroUtil.HoursToHMS(sunPosition.RA)}, Dec: {AstroUtil.DegreesToDMS(sunPosition.Dec)}");
-
-            var sunRaRadians = AstroUtil.ToRadians(AstroUtil.HoursToDegrees(sunPosition.RA));
-            var sunDecRadians = AstroUtil.ToRadians(sunPosition.Dec);
-
-            _ = coordinates.Transform(Epoch.JNOW);
-            var targetRaRadians = AstroUtil.ToRadians(coordinates.RADegrees);
-            var targetDecRadians = AstroUtil.ToRadians(coordinates.Dec);
-
-            var theta = SOFA.Seps(sunRaRadians, sunDecRadians, targetRaRadians, targetDecRadians);
+            var theta = SOFA.Seps(sepObjectRaRadians, sepObjectDecRadians, targetRaRadians, targetDecRadians);
 
             var thetaDegrees = AstroUtil.ToDegree(theta);
-            Logger.Debug($"Sun angle: {thetaDegrees:0.00}");
+            Logger.Trace($"{toObject} angle: {thetaDegrees:0.00}");
 
             return thetaDegrees;
         }
