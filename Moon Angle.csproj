@@ -79,6 +79,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="Utility\Enums.cs" />
     <Compile Include="Utility\Utility.cs" />
     <Page Include="MoonAngleCondition\MoonAngleConditionTemplate.xaml">
       <SubType>Designer</SubType>

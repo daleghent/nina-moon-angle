@@ -64,7 +64,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
                 return;
             }
 
-            ActualSeparation = Utility.CalculateMoonSeparation(TargetInfo.Coordinates, GetObserverInfo());
+            ActualSeparation = Utility.CalculateTargetSeparation(TargetInfo.Coordinates, Enums.SepObject.Moon, GetObserverInfo());
             UpdateLorentizanFactors();
 
             if (!Check(null, null)) {
