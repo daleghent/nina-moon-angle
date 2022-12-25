@@ -40,11 +40,11 @@ namespace DaleGhent.NINA.MoonAngle {
 
         private const string sunAngleKeywordName = "SUNANGLE";
         private const string sunAngleKeywordComment = "[deg] Angular separation between {0} and sun";
-        private readonly ImagePattern imagePatternSun = new ImagePattern("$$SUNANGLE$$", "Target's angular separation from the sun", "Moon Angle");
+        private readonly ImagePattern imagePatternSun = new ImagePattern("$$SUNANGLE$$", "Target's angular separation from the sun", "Moon Angle") { Value = "146.83" };
 
         private const string moonAngleKeywordName = "MOONANGL";
         private const string moonAngleKeywordComment = "[deg] Angular separation between {0} and moon";
-        private readonly ImagePattern imagePatternMoon = new ImagePattern("$$MOONANGLE$$", "Target's angular separation from the moon", "Moon Angle");
+        private readonly ImagePattern imagePatternMoon = new ImagePattern("$$MOONANGLE$$", "Target's angular separation from the moon", "Moon Angle") { Value = "34.19" };
 
         [ImportingConstructor]
         public MoonAngle(IProfileService profileService, IOptionsVM options, IImageSaveMediator imageSaveMediator) {
