@@ -28,6 +28,7 @@ using System.ComponentModel.Composition;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
 
@@ -110,6 +111,8 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
                 lorentzian = value;
 
                 UpdateLorentizanFactors();
+                Check(null, null);
+
                 RaisePropertyChanged();
             }
         }
@@ -125,6 +128,8 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
                     lorentzianWidth = value < 0 ? 0 : value > 15 ? 15 : value;
 
                     UpdateLorentizanFactors();
+                    Check(null, null);
+
                     RaisePropertyChanged();
                 }
             }
@@ -133,6 +138,18 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
         public ComparisonOperatorEnum[] ComparisonOperators => Enum.GetValues(typeof(ComparisonOperatorEnum))
             .Cast<ComparisonOperatorEnum>()
             .ToArray();
+
+        private Color limitStatusColor = Colors.Transparent;
+
+        public Color LimitStatusColor {
+            get => limitStatusColor;
+            private set {
+                if (!limitStatusColor.Equals(value)) {
+                    limitStatusColor = value;
+                    RaisePropertyChanged();
+                }
+            }
+        }
 
         public override bool Check(ISequenceItem previousItem, ISequenceItem nextItem) {
             if (TargetInfo == null) {
@@ -174,6 +191,8 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
                 default:
                     return false;
             }
+
+            LimitStatusColor = result ? Colors.DarkRed : Colors.Transparent;
 
             return !result;
         }

@@ -120,11 +120,23 @@
                             Margin="5,0,0,0"
                             VerticalAlignment="Center"
                             Text="Current target-moon separation:" />
+                        <TextBlock Margin="5,0,0,0" VerticalAlignment="Center" Text=" ">
+                            <TextBlock.Background>
+                                <SolidColorBrush Color="{Binding LimitStatusColor}"/>
+                            </TextBlock.Background>
+                        </TextBlock>
                         <TextBlock
-                            Margin="5,0,0,0"
                             VerticalAlignment="Center"
-                            Text="{Binding ActualSeparation, StringFormat={}{0:0.00}}" />
-                        <TextBlock VerticalAlignment="Center" Text="° " />
+                            Text="{Binding ActualSeparation, StringFormat={}{0:0.00}}">
+                            <TextBlock.Background>
+                                <SolidColorBrush Color="{Binding LimitStatusColor}"/>
+                            </TextBlock.Background>
+                        </TextBlock>
+                        <TextBlock VerticalAlignment="Center" Text="° ">
+                            <TextBlock.Background>
+                                <SolidColorBrush Color="{Binding LimitStatusColor}"/>
+                            </TextBlock.Background>
+                        </TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.Style>
@@ -174,10 +186,24 @@
                         VerticalAlignment="Center"
                         Text="(Current:" />
                     <TextBlock
-                        Margin="5,0,0,0"
                         VerticalAlignment="Center"
-                        Text="{Binding ActualSeparation, StringFormat={}{0:0.00}}" />
-                    <TextBlock VerticalAlignment="Center" Text="°" />
+                        Text=" ">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="{Binding LimitStatusColor}"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="{Binding ActualSeparation, StringFormat={}{0:0.00}}">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="{Binding LimitStatusColor}"/>
+                        </TextBlock.Background>
+                    </TextBlock>
+                    <TextBlock VerticalAlignment="Center" Text="°">
+                        <TextBlock.Background>
+                            <SolidColorBrush Color="{Binding LimitStatusColor}"/>
+                        </TextBlock.Background>
+                    </TextBlock>
                     <TextBlock
                         Margin="0,0,0,0"
                         VerticalAlignment="Center"
