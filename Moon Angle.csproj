@@ -19,7 +19,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="NINA.Plugin">
-      <Version>3.0.0.1001-nightly</Version>
+      <Version>3.1.0.9001</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup />
