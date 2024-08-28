@@ -135,7 +135,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
             }
         }
 
-        public ComparisonOperatorEnum[] ComparisonOperators => Enum.GetValues(typeof(ComparisonOperatorEnum))
+        public static ComparisonOperatorEnum[] ComparisonOperators => Enum.GetValues(typeof(ComparisonOperatorEnum))
             .Cast<ComparisonOperatorEnum>()
             .ToArray();
 
@@ -232,7 +232,7 @@ namespace DaleGhent.NINA.MoonAngle.MoonAngleCondition {
 
             if (i != Issues) {
                 Issues = i;
-                RaisePropertyChanged("Issues");
+                RaisePropertyChanged(nameof(Issues));
             }
 
             return i.Count == 0;
