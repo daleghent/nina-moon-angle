@@ -22,7 +22,6 @@ using NINA.WPF.Base.Interfaces.ViewModel;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Settings = DaleGhent.NINA.MoonAngle.Properties.Settings;
 
@@ -124,10 +123,6 @@ namespace DaleGhent.NINA.MoonAngle {
 
         protected void RaiseAllPropertiesChanged() {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(null));
-        }
-
-        protected void RaisePropertyChanged([CallerMemberName] string propertyName = null) {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
