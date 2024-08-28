@@ -1,5 +1,9 @@
 ﻿# Moon angle
 
+## 2.2.0.0 - 2024-08-27
+* Folded keyword and file pattern processing into the same FinalizeImage event
+* Code cleanups and updates to .NET 8 and NINA 3.1
+
 ## 2.1.0.0 - 2022-11-13
 * Fixed Lorentzian separation math
 * Reduced logging level of one message from Debug to Trace
